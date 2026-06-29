@@ -1,19 +1,30 @@
 <header>
   <nav class="nav-container">
-    <div style="display: flex; align-items: center; gap: 2rem;">
-      <a routerLink="/" class="brand-logo">MindMirror</a>
-      <div class="nav-links">
-        <a routerLink="/" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
-        <a routerLink="/posts/all" routerLinkActive="active" class="nav-link">Posts</a>
-        <a routerLink="/subscribe" routerLinkActive="active" class="nav-link">Newsletter</a>
+    <div class="nav-left">
+      <a routerLink="/" class="brand-logo" (click)="closeMobileMenu()">MindMirror</a>
+      <div class="nav-links" [class.is-open]="mobileMenuOpen()">
+        <a routerLink="/" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Inicio</a>
+        <a routerLink="/posts/all" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Posts</a>
+        <a routerLink="/subscribe" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Newsletter</a>
         @if (authService.isLoggedIn()) {
-          <a routerLink="/drafts" routerLinkActive="active" class="nav-link">Borradores</a>
-          <a routerLink="/profile" routerLinkActive="active" class="nav-link">Mi Perfil</a>
+          <a routerLink="/drafts" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Borradores</a>
+          <a routerLink="/profile" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Mi Perfil</a>
           @if (authService.isAdmin()) {
-            <a routerLink="/admin/subscribers" routerLinkActive="active" class="nav-link">Suscriptores</a>
+            <a routerLink="/admin/subscribers" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Suscriptores</a>
           }
         }
+        @if (authService.isLoggedIn()) {
+          <div class="nav-links-mobile-actions">
+            <button type="button" class="btn btn-secondary btn-sm" style="width: 100%;" (click)="logout(); closeMobileMenu()">
+              <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
+              Cerrar sesión
+            </button>
+          </div>
+        }
       </div>
+      @if (mobileMenuOpen()) {
+        <div class="nav-overlay" (click)="closeMobileMenu()"></div>
+      }
     </div>
 
     <div class="nav-actions">
@@ -24,14 +35,20 @@
           <span class="material-symbols-outlined" style="font-size: 18px;">dark_mode</span>
         }
       </button>
+      <button type="button" class="mobile-menu-toggle" (click)="toggleMobileMenu()" aria-label="Menú de navegación">
+        @if (mobileMenuOpen()) {
+          <span class="material-symbols-outlined">close</span>
+        } @else {
+          <span class="material-symbols-outlined">menu</span>
+        }
+      </button>
       @if (authService.isLoggedIn()) {
-        <button type="button" class="btn btn-secondary btn-sm" (click)="logout()">
+        <button type="button" class="btn btn-secondary btn-sm nav-desktop-only" (click)="logout()">
           <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
           Cerrar sesión
         </button>
       } @else {
-        <a routerLink="/login" class="nav-link" style="margin-right: 0.5rem;">Iniciar sesión</a>
-        <a routerLink="/subscribe" class="btn btn-primary">Suscribirse</a>
+        <a routerLink="/subscribe" class="btn btn-primary nav-desktop-only">Suscribirse</a>
       }
     </div>
   </nav>

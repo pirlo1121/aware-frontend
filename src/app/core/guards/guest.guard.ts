@@ -1,16 +1,22 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { map, catchError, of } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 
-/**
- * Guard que evita que usuarios ya autenticados accedan
- * a las páginas de login o registro.
- * Si el usuario está autenticado, lo redirige al inicio.
- */
 export const guestGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
+
+  if (!authService.sessionChecked()) {
+    return authService.restoreSession().pipe(
+      map(() => {
+        if (!authService.isLoggedIn()) return true;
+        return router.createUrlTree(['/']);
+      }),
+      catchError(() => of(true)),
+    );
+  }
 
   if (!authService.isLoggedIn()) {
     return true;
