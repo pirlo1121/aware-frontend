@@ -1,7 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DatePipe } from '@angular/common';
 
 import { PostService } from '../../../core/services/post.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -10,7 +9,7 @@ import { Post, ContentBlock } from '../../../core/interfaces';
 @Component({
   selector: 'app-post-detail',
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink],
   templateUrl: './post-detail.component.html',
 })
 export class PostDetailComponent implements OnInit {

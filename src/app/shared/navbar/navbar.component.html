@@ -3,7 +3,8 @@
     <div style="display: flex; align-items: center; gap: 2rem;">
       <a routerLink="/" class="brand-logo">MindMirror</a>
       <div class="nav-links">
-        <a routerLink="/posts" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{ exact: true }">Posts</a>
+        <a routerLink="/" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{ exact: true }">Inicio</a>
+        <a routerLink="/posts/all" routerLinkActive="active" class="nav-link">Posts</a>
         <a routerLink="/subscribe" routerLinkActive="active" class="nav-link">Newsletter</a>
         @if (authService.isLoggedIn()) {
           <a routerLink="/drafts" routerLinkActive="active" class="nav-link">Borradores</a>

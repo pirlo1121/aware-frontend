@@ -1,9 +1,4 @@
 <div class="article-container" style="padding-top: 1rem;">
-  <!-- Back navigation link -->
-  <a routerLink="/posts" class="btn btn-secondary" style="margin-bottom: 1.5rem; display: inline-flex; align-items: center; gap: 0.25rem;">
-    <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span> Volver a los artículos
-  </a>
-
   @if (isLoading()) {
     <div style="text-align: center; padding: 4rem 0;">
       <p style="font-size: 1.2rem; color: var(--on-surface-variant);">Cargando artículo...</p>
@@ -15,6 +10,10 @@
     </div>
   } @else if (post(); as currentPost) {
     <article>
+      <a routerLink="/posts/all" class="back-link">
+        <span class="material-symbols-outlined">arrow_back</span> Volver a los artículos
+      </a>
+
       <!-- Cabecera -->
       <header class="article-header">
         <!-- <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">

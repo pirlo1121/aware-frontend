@@ -65,6 +65,22 @@
   --transition-custom: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
 /* Global Resets */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -626,6 +642,59 @@ textarea.form-control {
 }
 
 /* Article Detail Styles */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  text-decoration: none;
+  margin-bottom: 1.5rem;
+  transition: var(--transition-custom);
+  opacity: 0.7;
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.back-link:hover {
+  opacity: 1;
+  color: var(--primary);
+  gap: 0.5rem;
+}
+
+.back-link .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.article-header {
+  position: static;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  background: none;
+  border: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  padding: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: 0.05s;
+}
+
+.article-cover-img,
+.article-cover-placeholder {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: 0.1s;
+}
+
+.article-content {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: 0.15s;
+}
+
+.article-actions {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation-delay: 0.2s;
+}
+
 .article-header {
   position: static;
   margin-bottom: 1.5rem;
@@ -760,6 +829,12 @@ textarea.form-control {
   max-width: 100%;
   border-radius: var(--radius-md);
   margin: 2rem 0;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.4s ease;
+}
+
+.article-content img:hover {
+  transform: scale(1.01);
+  box-shadow: var(--shadow-hover);
 }
 
 .article-actions {
@@ -1081,9 +1156,12 @@ footer {
   border-color: #0a3622;
 }
 
+img {
+  transition: opacity 0.4s ease;
+}
+
 .dark-mode img {
   opacity: 0.9;
-  transition: opacity 0.3s ease;
 }
 
 .dark-mode img:hover {
