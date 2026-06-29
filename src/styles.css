@@ -503,7 +503,7 @@ textarea.form-control {
   flex-direction: column;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-low);
+  box-shadow: var(--shadow-hover);
   background-color: var(--surface-container-lowest);
   margin-bottom: var(--section-gap);
 }
@@ -511,19 +511,20 @@ textarea.form-control {
 @media (min-width: 1024px) {
   .hero-section {
     flex-direction: row;
-    min-height: 550px;
+    min-height: 520px;
   }
 }
 
 .hero-image-wrapper {
   position: relative;
-  height: 300px;
+  height: 320px;
+  overflow: hidden;
 }
 
 @media (min-width: 1024px) {
   .hero-image-wrapper {
-    width: 60%;
-    height: auto;
+    width: 55%;
+    height: 520px;
   }
 }
 
@@ -531,6 +532,25 @@ textarea.form-control {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.hero-image-wrapper:hover .hero-image {
+  transform: scale(1.03);
+}
+
+.hero-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--primary) 0%, transparent 100%);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.hero-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .hero-content {
@@ -538,19 +558,83 @@ textarea.form-control {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 1rem;
 }
 
 @media (min-width: 1024px) {
   .hero-content {
-    width: 40%;
-    padding: 3rem;
+    width: 45%;
+    padding: 2.5rem 3rem;
   }
 }
 
 .hero-title {
   font-size: 2.2rem;
   line-height: 1.2;
-  margin-bottom: 1rem;
+  margin: 0;
+}
+
+.hero-title a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition-custom);
+}
+
+.hero-title a:hover {
+  color: var(--secondary);
+}
+
+.hero-excerpt {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--on-surface-variant);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--outline-variant);
+  margin-top: auto;
+}
+
+.hero-author-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: var(--primary-fixed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.hero-author-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.hero-author-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--primary);
+  margin: 0;
+}
+
+.hero-author-date {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  margin: 0;
 }
 
 /* Quote Section */

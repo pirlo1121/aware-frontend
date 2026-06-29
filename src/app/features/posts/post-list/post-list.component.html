@@ -42,52 +42,51 @@
       }
     </div>
   } @else {
-    <!-- Hero / Featured Post (First post in the list) -->
     @if (posts()[0]; as featured) {
         <section class="hero-section">
-          <a [routerLink]="['/posts', featured.slug]" class="hero-image-wrapper" style="display: block; text-decoration: none; cursor: pointer;">
-            <img class="hero-image" 
-                 [src]="featured.coverImage || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAeUkXI1rKxsOBvUQyc65s9xJfUXU4zJhdn362haQ_3gDbdXcaAO_tZKLwa4VBIccTBdHBNykyPSoinoI9EQ4hB2Z0mI5XKGLq46Faj08voOKj4T4CExdI6WxXvgUYjHsDkjG880eAhXQ984rfUzscFT4QqqLx8PJE228g4zJbhjl9kB3NWBkLOevqoVvVl_PaTKNSgDTDVDrg7Tyf4eIDbaBUvrjkazfxpbYHpSPSlS2TQ3oMUddbWEV84cnlbeiy0Kd1V-7rxnQZD'" 
+          <a [routerLink]="['/posts', featured.slug]" class="hero-image-wrapper">
+            <img class="hero-image"
+                 [src]="featured.coverImage || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAeUkXI1rKxsOBvUQyc65s9xJfUXU4zJhdn362haQ_3gDbdXcaAO_tZKLwa4VBIccTBdHBNykyPSoinoI9EQ4hB2Z0mI5XKGLq46Faj08voOKj4T4CExdI6WxXvgUYjHsDkjG880eAhXQ984rfUzscFT4QqqLx8PJE228g4zJbhjl9kB3NWBkLOevqoVvVl_PaTKNSgDTDVDrg7Tyf4eIDbaBUvrjkazfxpbYHpSPSlS2TQ3oMUddbWEV84cnlbeiy0Kd1V-7rxnQZD'"
                  [alt]="featured.title" />
-            <div style="position: absolute; inset: 0; background: linear-gradient(to top, var(--primary) 0%, transparent 100%); opacity: 0.35; pointer-events: none;"></div>
+            <div class="hero-image-overlay"></div>
           </a>
           <div class="hero-content">
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+            <div class="hero-badges" style="margin-bottom: 1.4rem;">
               <span class="badge badge-secondary">Destacado</span>
               @if (featured.status === 'draft') {
                 <span class="badge badge-draft">Borrador</span>
               }
             </div>
-            <h2 class="hero-title" style="font-family: var(--font-display); font-weight: 700;">
+            <h2 class="hero-title" style="margin-bottom: 1.4rem;">
               <a [routerLink]="['/posts', featured.slug]">{{ featured.title }}</a>
             </h2>
-            <p class="hero-excerpt" style="font-size: 1.1rem; color: var(--on-surface-variant); margin-bottom: 1.5rem; line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
+            <p class="hero-excerpt">
               {{ featured.excerpt || 'Descubre esta profunda reflexión del autor sobre la condición humana y la mente.' }}
             </p>
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: auto; flex-wrap: wrap; gap: 0.75rem;">
-              <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <div style="width: 40px; height: 40px; border-radius: var(--radius-full); background-color: var(--primary-fixed); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary);">
-                  {{ featured.author.name.charAt(0).toUpperCase() }}
-                </div>
-                <div>
-                  <p style="font-weight: 600; font-size: 0.9rem; color: var(--primary);">{{ featured.author.name }}</p>
-                  <p style="font-size: 0.75rem; color: var(--on-surface-variant);">
-                    @if (featured.publishedAt) {
-                      {{ featured.publishedAt | date: 'mediumDate' }}
-                    } @else {
-                      {{ featured.createdAt | date: 'mediumDate' }}
-                    }
-                  </p>
-                </div>
+            <div class="hero-meta">
+              <div class="hero-author-avatar">
+                {{ featured.author.name.charAt(0).toUpperCase() }}
               </div>
-              <a [routerLink]="['/posts', featured.slug]" class="btn btn-primary">
-                <span class="material-symbols-outlined">book</span> Leer artículo completo
-              </a>
-              @if (authService.isLoggedIn()) {
-                <a [routerLink]="['/posts', featured._id, 'edit']" class="btn btn-secondary btn-sm">
-                  <span class="material-symbols-outlined" style="font-size: 18px;">edit</span> Editar
+              <div class="hero-author-info">
+                <p class="hero-author-name">{{ featured.author.name }}</p>
+                <p class="hero-author-date">
+                  @if (featured.publishedAt) {
+                    {{ featured.publishedAt | date: 'mediumDate' }}
+                  } @else {
+                    {{ featured.createdAt | date: 'mediumDate' }}
+                  }
+                </p>
+              </div>
+              <div style="margin-left: auto; display: flex; gap: 0.5rem;">
+                <a [routerLink]="['/posts', featured.slug]" class="btn btn-primary btn-sm">
+                  <span class="material-symbols-outlined">book</span> Leer
                 </a>
-              }
+                @if (authService.isLoggedIn()) {
+                  <a [routerLink]="['/posts', featured._id, 'edit']" class="btn btn-secondary btn-sm">
+                    <span class="material-symbols-outlined">edit</span>
+                  </a>
+                }
+              </div>
             </div>
           </div>
         </section>
