@@ -1,0 +1,316 @@
+<div class="rich-editor" [class.is-fullscreen]="isFullscreen()" (click)="closeAddMenu()">
+
+  <!-- ─── Toolbar ────────────────────────────────────────────────────────────── -->
+  <div class="editor-toolbar">
+    <div class="toolbar-group">
+      <span class="toolbar-stat">
+        <span class="stat-value">{{blocks.length}}</span>
+        <span class="stat-label">bloques</span>
+      </span>
+      <span class="toolbar-divider"></span>
+      <span class="toolbar-stat">
+        <span class="stat-value">{{wordCount()}}</span>
+        <span class="stat-label">palabras</span>
+      </span>
+      <span class="toolbar-divider"></span>
+      <span class="toolbar-stat">
+        <span class="stat-value">{{charCount()}}</span>
+        <span class="stat-label">caracteres</span>
+      </span>
+    </div>
+    <div class="toolbar-group">
+      <button
+        type="button"
+        class="toolbar-btn"
+        (click)="toggleFullscreen()"
+        [title]="isFullscreen() ? 'Salir de pantalla completa' : 'Pantalla completa'"
+      >
+        <span class="material-symbols-outlined">{{ isFullscreen() ? 'fullscreen_exit' : 'fullscreen' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── Empty State ────────────────────────────────────────────────────────── -->
+  @if (blocks.length === 0) {
+    <div class="editor-empty">
+      <div class="empty-icon">
+        <span class="material-symbols-outlined">edit_note</span>
+      </div>
+      <p class="empty-title">Comienza a escribir</p>
+      <p class="empty-hint">Agrega tu primer bloque de contenido</p>
+      <div class="empty-actions">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="insertBlock('paragraph', 0)">
+          <span class="material-symbols-outlined" style="font-size: 16px;">notes</span> Párrafo
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="insertBlock('heading', 0)">
+          <span class="material-symbols-outlined" style="font-size: 16px;">title</span> Encabezado
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" (click)="insertBlock('image', 0)">
+          <span class="material-symbols-outlined" style="font-size: 16px;">image</span> Imagen
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- ─── Blocks ─────────────────────────────────────────────────────────────── -->
+  <div class="blocks-container">
+    @for (block of blocks; track trackByIndex($index); let i = $index) {
+      <!-- Inline add button (before block) -->
+      <div class="block-add-zone" (click)="$event.stopPropagation()">
+        <button
+          type="button"
+          class="block-add-btn"
+          (click)="toggleAddMenu(i, 'before')"
+          [class.is-active]="addMenu()?.index === i && addMenu()?.type === 'before'"
+        >
+          <span class="material-symbols-outlined">add</span>
+        </button>
+        @if (addMenu()?.index === i && addMenu()?.type === 'before') {
+          <div class="add-menu" (click)="$event.stopPropagation()">
+            <button type="button" class="add-menu-item" (click)="insertBlock('paragraph', i)">
+              <span class="material-symbols-outlined">notes</span> Párrafo
+            </button>
+            <button type="button" class="add-menu-item" (click)="insertBlock('heading', i)">
+              <span class="material-symbols-outlined">title</span> Encabezado
+            </button>
+            <button type="button" class="add-menu-item" (click)="insertBlock('quote', i)">
+              <span class="material-symbols-outlined">format_quote</span> Cita
+            </button>
+            <button type="button" class="add-menu-item" (click)="insertBlock('list', i)">
+              <span class="material-symbols-outlined">format_list_bulleted</span> Lista
+            </button>
+            <button type="button" class="add-menu-item" (click)="insertBlock('image', i)">
+              <span class="material-symbols-outlined">image</span> Imagen
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- Block -->
+      <div
+        class="block-wrapper"
+        [class.is-focused]="focusedIndex() === i"
+        [class.is-dragging]="dragIndex() === i"
+        [class.is-drag-over]="dragOverIndex() === i"
+        draggable="true"
+        (dragstart)="onDragStart($event, i)"
+        (dragover)="onDragOver($event, i)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event, i)"
+      >
+        <!-- Drag Handle -->
+        <div class="block-drag-handle" title="Arrastrar para reordenar">
+          <span class="material-symbols-outlined">drag_indicator</span>
+        </div>
+
+        <!-- Block Body -->
+        <div class="block-body">
+          <!-- Block type badge + actions -->
+          <div class="block-header">
+            <div class="block-type-badge">
+              @switch (block.type) {
+                @case ('paragraph') {
+                  <span class="material-symbols-outlined">notes</span>
+                  <span>Párrafo</span>
+                }
+                @case ('heading') {
+                  <span class="material-symbols-outlined">title</span>
+                  <span>Encabezado</span>
+                }
+                @case ('image') {
+                  <span class="material-symbols-outlined">image</span>
+                  <span>Imagen</span>
+                }
+                @case ('quote') {
+                  <span class="material-symbols-outlined">format_quote</span>
+                  <span>Cita</span>
+                }
+                @case ('list') {
+                  <span class="material-symbols-outlined">format_list_bulleted</span>
+                  <span>Lista</span>
+                }
+              }
+            </div>
+
+            <div class="block-header-actions">
+              @if (block.type === 'heading') {
+                <select
+                  class="heading-level-select"
+                  [value]="block.level"
+                  (change)="updateHeadingLevel(i, $any($event.target).value)"
+                  (click)="$event.stopPropagation()"
+                >
+                  @for (level of [1, 2, 3, 4, 5, 6]; track level) {
+                    <option [value]="level" [selected]="block.level === level">H{{ level }}</option>
+                  }
+                </select>
+              }
+
+              <button
+                type="button"
+                class="block-action-btn"
+                (click)="moveBlock(i, -1)"
+                [disabled]="i === 0"
+                title="Mover arriba"
+              >
+                <span class="material-symbols-outlined">keyboard_arrow_up</span>
+              </button>
+              <button
+                type="button"
+                class="block-action-btn"
+                (click)="moveBlock(i, 1)"
+                [disabled]="i === blocks.length - 1"
+                title="Mover abajo"
+              >
+                <span class="material-symbols-outlined">keyboard_arrow_down</span>
+              </button>
+              <button type="button" class="block-action-btn block-action-danger" (click)="removeBlock(i)" title="Eliminar bloque">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Paragraph -->
+          @if (block.type === 'paragraph') {
+            <textarea
+              #blockContent
+              class="block-input block-paragraph"
+              [value]="block.content"
+              (input)="updateBlockContent(i, $any($event.target).value); autoResize($any($event.target))"
+              (keydown)="onBlockKeyDown($event, i)"
+              (focus)="onBlockFocus(i)"
+              (blur)="onBlockBlur()"
+              placeholder="Escribe tu párrafo aquí..."
+              rows="1"
+            ></textarea>
+          }
+
+          <!-- Heading -->
+          @if (block.type === 'heading') {
+            <div class="heading-input-wrapper">
+              <input
+                #blockContent
+                type="text"
+                class="block-input block-heading"
+                [class.h1]="block.level === 1"
+                [class.h2]="block.level === 2"
+                [class.h3]="block.level === 3"
+                [class.h4]="block.level === 4"
+                [class.h5]="block.level === 5"
+                [class.h6]="block.level === 6"
+                [value]="block.content"
+                (input)="updateBlockContent(i, $any($event.target).value)"
+                (keydown)="onBlockKeyDown($event, i)"
+                (focus)="onBlockFocus(i)"
+                (blur)="onBlockBlur()"
+                placeholder="Texto del encabezado"
+              />
+            </div>
+          }
+
+          <!-- Quote -->
+          @if (block.type === 'quote') {
+            <textarea
+              #blockContent
+              class="block-input block-quote"
+              [value]="block.content"
+              (input)="updateBlockContent(i, $any($event.target).value); autoResize($any($event.target))"
+              (keydown)="onBlockKeyDown($event, i)"
+              (focus)="onBlockFocus(i)"
+              (blur)="onBlockBlur()"
+              placeholder="Escribe la cita aquí..."
+              rows="1"
+            ></textarea>
+          }
+
+          <!-- List -->
+          @if (block.type === 'list') {
+            <textarea
+              #blockContent
+              class="block-input block-list"
+              [value]="block.items.join('\n')"
+              (input)="updateBlockContent(i, $any($event.target).value); autoResize($any($event.target))"
+              (keydown)="onBlockKeyDown($event, i)"
+              (focus)="onBlockFocus(i)"
+              (blur)="onBlockBlur()"
+              placeholder="Un elemento por línea:&#10;Primer elemento&#10;Segundo elemento"
+              rows="1"
+            ></textarea>
+          }
+
+          <!-- Image -->
+          @if (block.type === 'image') {
+            <div class="image-block-content" (click)="$event.stopPropagation()">
+              <!-- Preview -->
+              @if (getImagePreview(i); as previewUrl) {
+                <div class="image-preview-wrapper">
+                  <img [src]="previewUrl" alt="Preview" class="image-preview" (error)="removeImage(i)" />
+                  <button type="button" class="image-remove-btn" (click)="removeImage(i)">
+                    <span class="material-symbols-outlined">close</span>
+                  </button>
+                </div>
+              }
+
+              <div class="image-input-row">
+                <input
+                  #fileInput
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+                  (change)="onImageFileSelected(i, $event)"
+                  style="display: none"
+                />
+                <button type="button" class="btn btn-secondary btn-sm" (click)="fileInput.click()">
+                  <span class="material-symbols-outlined" style="font-size: 16px;">upload</span>
+                  {{ contentImageFiles[i] ? 'Cambiar' : 'Subir' }}
+                </button>
+                @if (!getImagePreview(i)) {
+                  <ng-container>
+                    <span class="image-or-separator">o</span>
+                    <input
+                      type="url"
+                      class="image-url-input"
+                      placeholder="https://ejemplo.com/imagen.jpg"
+                      [value]="block.imageUrl"
+                      (input)="updateImageUrl(i, $any($event.target).value)"
+                    />
+                  </ng-container>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Bottom add button -->
+    <div class="block-add-zone" (click)="$event.stopPropagation()">
+      <button
+        type="button"
+        class="block-add-btn"
+        (click)="toggleAddMenu(blocks.length, 'after')"
+        [class.is-active]="addMenu()?.index === blocks.length && addMenu()?.type === 'after'"
+      >
+        <span class="material-symbols-outlined">add</span>
+      </button>
+      @if (addMenu()?.index === blocks.length && addMenu()?.type === 'after') {
+        <div class="add-menu" (click)="$event.stopPropagation()">
+          <button type="button" class="add-menu-item" (click)="insertBlock('paragraph', blocks.length)">
+            <span class="material-symbols-outlined">notes</span> Párrafo
+          </button>
+          <button type="button" class="add-menu-item" (click)="insertBlock('heading', blocks.length)">
+            <span class="material-symbols-outlined">title</span> Encabezado
+          </button>
+          <button type="button" class="add-menu-item" (click)="insertBlock('quote', blocks.length)">
+            <span class="material-symbols-outlined">format_quote</span> Cita
+          </button>
+          <button type="button" class="add-menu-item" (click)="insertBlock('list', blocks.length)">
+            <span class="material-symbols-outlined">format_list_bulleted</span> Lista
+          </button>
+          <button type="button" class="add-menu-item" (click)="insertBlock('image', blocks.length)">
+            <span class="material-symbols-outlined">image</span> Imagen
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</div>
