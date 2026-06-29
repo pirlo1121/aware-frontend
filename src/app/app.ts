@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 
 import { AuthService } from './core/services/auth.service';
+import { ThemeService } from './core/services/theme.service';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 
 @Component({
@@ -54,6 +55,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 })
 export class App implements OnInit {
   private readonly authService = inject(AuthService);
+  private readonly themeService = inject(ThemeService);
 
   ngOnInit(): void {
     /**
