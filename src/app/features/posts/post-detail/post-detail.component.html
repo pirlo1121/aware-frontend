@@ -17,7 +17,7 @@
     <article>
       <!-- Cabecera -->
       <header class="article-header">
-        <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+        <!-- <div style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
           @if (currentPost.status === 'draft') {
             <span class="badge badge-draft">Borrador</span>
           } @else {
@@ -26,7 +26,7 @@
           @for (tag of currentPost.tags; track tag) {
             <span class="badge badge-secondary">{{ tag }}</span>
           }
-        </div>
+        </div> -->
 
         <h1 class="article-title" style="font-family: var(--font-display); font-weight: 700; color: var(--primary);">
           {{ currentPost.title }}
@@ -38,7 +38,7 @@
           </p>
         }
 
-        <div class="article-meta">
+        <!-- <div class="article-meta">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <div style="width: 32px; height: 32px; border-radius: var(--radius-full); background-color: var(--primary-fixed); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary); font-size: 0.8rem;">
               {{ currentPost.author.name.charAt(0).toUpperCase() }}
@@ -53,7 +53,8 @@
               Creado el {{ currentPost.createdAt | date: 'longDate' }}
             }
           </span>
-        </div>
+        </div> -->
+
       </header>
 
       <!-- Imagen de portada -->
@@ -61,7 +62,7 @@
         <img class="article-cover-img" [src]="currentPost.coverImage" [alt]="currentPost.title" />
       } @else {
         <!-- Ethereal default cover matching brand -->
-        <div style="width: 100%; height: 350px; border-radius: var(--radius-lg); background: linear-gradient(135deg, var(--primary-container), var(--surface-tint)); margin-bottom: 3rem; display: flex; align-items: center; justify-content: center; color: white;">
+        <div class="article-cover-placeholder">
           <span class="material-symbols-outlined" style="font-size: 64px; opacity: 0.3;">auto_stories</span>
         </div>
       }

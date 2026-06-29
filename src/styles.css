@@ -257,6 +257,7 @@ nav.nav-container {
 
 .btn-primary:hover {
   background-color: var(--primary-container);
+  color: var(--on-primary-container);
 }
 
 .btn-secondary {
@@ -276,6 +277,7 @@ nav.nav-container {
 
 .btn-dark:hover {
   background-color: var(--primary-container);
+  color: var(--on-primary-container);
 }
 
 .btn-danger {
@@ -538,7 +540,7 @@ textarea.form-control {
 /* Quote Section */
 .quote-section {
   background-color: var(--primary-container);
-  color: var(--on-primary);
+  color: var(--on-primary-container);
   padding: 5rem 0;
   text-align: center;
   position: relative;
@@ -685,6 +687,23 @@ textarea.form-control {
   .article-cover-img {
     max-height: 420px;
   }
+}
+
+.article-cover-placeholder {
+  width: 100%;
+  height: 350px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--primary-container), var(--surface-tint));
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.dark-mode .article-cover-placeholder {
+  background: linear-gradient(135deg, var(--primary-container), var(--surface-container-high));
+  color: var(--on-surface);
 }
 
 .article-content {
