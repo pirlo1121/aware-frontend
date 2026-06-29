@@ -1,0 +1,137 @@
+<section>
+  <h1>{{ editingPostId() ? 'Editar post' : 'Nuevo post' }}</h1>
+
+  @if (errorMessage()) {
+    <div role="alert">{{ errorMessage() }}</div>
+  }
+
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+
+    <!-- Título -->
+    <div>
+      <label for="post-title">Título *</label>
+      <input
+        id="post-title"
+        type="text"
+        formControlName="title"
+        placeholder="Título del post"
+      />
+      @if (titleControl.invalid && titleControl.touched) {
+        <small>El título es requerido (máx. 200 caracteres).</small>
+      }
+    </div>
+
+    <!-- Extracto -->
+    <div>
+      <label for="post-excerpt">Extracto</label>
+      <textarea
+        id="post-excerpt"
+        formControlName="excerpt"
+        rows="3"
+        placeholder="Resumen breve del post (máx. 500 caracteres)"
+      ></textarea>
+      @if (excerptControl.invalid && excerptControl.touched) {
+        <small>Máximo 500 caracteres.</small>
+      }
+    </div>
+
+    <!-- Estado -->
+    <div>
+      <label for="post-status">Estado</label>
+      <select id="post-status" formControlName="status">
+        <option value="draft">Borrador</option>
+        <option value="published">Publicado</option>
+      </select>
+    </div>
+
+    <!-- Tags -->
+    <div>
+      <label for="post-tags">Tags</label>
+      <input
+        id="post-tags"
+        type="text"
+        formControlName="tags"
+        placeholder="node,express,mongodb (separados por coma)"
+      />
+    </div>
+
+    <!-- Imagen de portada -->
+    <div>
+      <label for="post-cover">Imagen de portada</label>
+      <input
+        id="post-cover"
+        type="file"
+        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp,image/svg+xml"
+        (change)="onCoverImageSelected($event)"
+      />
+      @if (selectedCoverImage()) {
+        <small>Seleccionada: {{ selectedCoverImage()!.name }}</small>
+      }
+    </div>
+
+    <!-- Bloques de contenido -->
+    <fieldset>
+      <legend>Contenido</legend>
+
+      <div>
+        <button type="button" (click)="addParagraphBlock()">+ Párrafo</button>
+        <button type="button" (click)="addHeadingBlock()">+ Encabezado</button>
+        <button type="button" (click)="addImageBlock()">+ Imagen</button>
+        <button type="button" (click)="addQuoteBlock()">+ Cita</button>
+        <button type="button" (click)="addListBlock()">+ Lista</button>
+      </div>
+
+      <div formArrayName="content">
+        @for (block of contentArray.controls; track $index) {
+          <div [formGroupName]="$index">
+            <span>Bloque {{ $index + 1 }}: {{ block.get('type')?.value }}</span>
+            <button type="button" (click)="removeBlock($index)">✕</button>
+
+            @if (block.get('type')?.value === 'paragraph' || block.get('type')?.value === 'quote') {
+              <textarea
+                formControlName="content"
+                rows="3"
+                placeholder="Texto del bloque"
+              ></textarea>
+            }
+
+            @if (block.get('type')?.value === 'heading') {
+              <select formControlName="level">
+                @for (level of [1, 2, 3, 4, 5, 6]; track level) {
+                  <option [value]="level">H{{ level }}</option>
+                }
+              </select>
+              <input
+                type="text"
+                formControlName="content"
+                placeholder="Texto del encabezado"
+              />
+            }
+
+            @if (block.get('type')?.value === 'image') {
+              <input
+                type="url"
+                formControlName="imageUrl"
+                placeholder="URL de la imagen"
+              />
+            }
+
+            @if (block.get('type')?.value === 'list') {
+              <textarea
+                formControlName="items"
+                rows="4"
+                placeholder="Un ítem por línea"
+              ></textarea>
+            }
+          </div>
+        }
+      </div>
+    </fieldset>
+
+    <button type="submit" [disabled]="isLoading()">
+      {{ isLoading() ? 'Guardando...' : (editingPostId() ? 'Actualizar' : 'Crear post') }}
+    </button>
+
+    <a [routerLink]="['/posts']">Cancelar</a>
+  </form>
+</section>

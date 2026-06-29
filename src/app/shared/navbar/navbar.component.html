@@ -1,0 +1,42 @@
+<nav>
+  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    Aware
+  </a>
+
+  <ul>
+    <li>
+      <a routerLink="/posts" routerLinkActive="active">Posts</a>
+    </li>
+    <li>
+      <a routerLink="/subscribe" routerLinkActive="active">Newsletter</a>
+    </li>
+
+    @if (authService.isLoggedIn()) {
+      <li>
+        <a routerLink="/drafts" routerLinkActive="active">Borradores</a>
+      </li>
+      <li>
+        <a routerLink="/profile" routerLinkActive="active">Mi perfil</a>
+      </li>
+
+      @if (authService.isAdmin()) {
+        <li>
+          <a routerLink="/admin/subscribers" routerLinkActive="active">
+            Suscriptores
+          </a>
+        </li>
+      }
+
+      <li>
+        <button type="button" (click)="logout()">Cerrar sesión</button>
+      </li>
+    } @else {
+      <li>
+        <a routerLink="/login" routerLinkActive="active">Iniciar sesión</a>
+      </li>
+      <li>
+        <a routerLink="/register" routerLinkActive="active">Registrarse</a>
+      </li>
+    }
+  </ul>
+</nav>

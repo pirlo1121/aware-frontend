@@ -1,0 +1,23 @@
+<section>
+  <h1>Mi perfil</h1>
+
+  @if (isLoading()) {
+    <p>Cargando perfil...</p>
+  } @else if (errorMessage()) {
+    <p role="alert">{{ errorMessage() }}</p>
+  } @else if (profile(); as userProfile) {
+    <dl>
+      <dt>Nombre</dt>
+      <dd>{{ userProfile.name }}</dd>
+
+      <dt>Email</dt>
+      <dd>{{ userProfile.email }}</dd>
+
+      <dt>Rol</dt>
+      <dd>{{ userProfile.role }}</dd>
+
+      <dt>Miembro desde</dt>
+      <dd>{{ userProfile.createdAt | date: 'longDate' }}</dd>
+    </dl>
+  }
+</section>

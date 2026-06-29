@@ -1,0 +1,100 @@
+<article>
+  @if (isLoading()) {
+    <p>Cargando post...</p>
+  } @else if (errorMessage()) {
+    <p role="alert">{{ errorMessage() }}</p>
+  } @else if (post(); as currentPost) {
+
+    <!-- Cabecera -->
+    <header>
+      <h1>{{ currentPost.title }}</h1>
+
+      @if (currentPost.excerpt) {
+        <p>{{ currentPost.excerpt }}</p>
+      }
+
+      <div>
+        <span>{{ currentPost.author.name }}</span>
+        <span>·</span>
+        <span>{{ currentPost.status === 'published' ? 'Publicado' : 'Borrador' }}</span>
+
+        @if (currentPost.publishedAt) {
+          <span>· {{ currentPost.publishedAt | date: 'longDate' }}</span>
+        }
+      </div>
+
+      @if (currentPost.tags.length > 0) {
+        <div>
+          @for (tag of currentPost.tags; track tag) {
+            <span>{{ tag }}</span>
+          }
+        </div>
+      }
+    </header>
+
+    <!-- Imagen de portada -->
+    @if (currentPost.coverImage) {
+      <img [src]="currentPost.coverImage" [alt]="currentPost.title" />
+    }
+
+    <!-- Bloques de contenido -->
+    <div>
+      @for (block of currentPost.content; track $index) {
+
+        @if (block.type === 'paragraph') {
+          <p>{{ block.content }}</p>
+        }
+
+        @if (block.type === 'heading') {
+          @switch (block.level) {
+            @case (1) { <h1>{{ block.content }}</h1> }
+            @case (2) { <h2>{{ block.content }}</h2> }
+            @case (3) { <h3>{{ block.content }}</h3> }
+            @case (4) { <h4>{{ block.content }}</h4> }
+            @case (5) { <h5>{{ block.content }}</h5> }
+            @case (6) { <h6>{{ block.content }}</h6> }
+          }
+        }
+
+        @if (block.type === 'image') {
+          <figure>
+            <img [src]="block.imageUrl" alt="Imagen del post" />
+          </figure>
+        }
+
+        @if (block.type === 'quote') {
+          <blockquote>{{ block.content }}</blockquote>
+        }
+
+        @if (block.type === 'list') {
+          <ul>
+            @for (item of block.items; track $index) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        }
+
+      }
+    </div>
+
+    <!-- Acciones (autor o admin) -->
+    @if (authService.isLoggedIn()) {
+      <div>
+        <a [routerLink]="['/posts', currentPost._id, 'edit']">Editar</a>
+
+        @if (currentPost.status === 'draft') {
+          <button type="button" (click)="publishPost()">Publicar</button>
+        }
+
+        <button
+          type="button"
+          (click)="deletePost()"
+          [disabled]="isDeleting()"
+        >
+          {{ isDeleting() ? 'Eliminando...' : 'Eliminar' }}
+        </button>
+      </div>
+    }
+
+  }
+</article>

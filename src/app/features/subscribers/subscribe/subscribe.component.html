@@ -1,0 +1,45 @@
+<section>
+  <h1>Suscríbete al newsletter</h1>
+  <p>Recibe notificaciones cuando se publique un nuevo artículo.</p>
+
+  @if (successMessage()) {
+    <div role="status">{{ successMessage() }}</div>
+  } @else {
+
+    @if (errorMessage()) {
+      <div role="alert">{{ errorMessage() }}</div>
+    }
+
+    <form [formGroup]="subscribeForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="subscribe-name">Nombre</label>
+        <input
+          id="subscribe-name"
+          type="text"
+          formControlName="name"
+          placeholder="Tu nombre"
+        />
+        @if (nameControl.invalid && nameControl.touched) {
+          <small>El nombre es requerido.</small>
+        }
+      </div>
+
+      <div>
+        <label for="subscribe-email">Correo electrónico</label>
+        <input
+          id="subscribe-email"
+          type="email"
+          formControlName="email"
+          placeholder="tu@email.com"
+        />
+        @if (emailControl.invalid && emailControl.touched) {
+          <small>Ingresa un correo válido.</small>
+        }
+      </div>
+
+      <button type="submit" [disabled]="isLoading()">
+        {{ isLoading() ? 'Suscribiendo...' : 'Suscribirme' }}
+      </button>
+    </form>
+  }
+</section>

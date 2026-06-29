@@ -1,0 +1,60 @@
+<section>
+  <h1>Posts</h1>
+
+  @if (authService.isLoggedIn()) {
+    <a routerLink="/posts/new">+ Nuevo post</a>
+  }
+
+  @if (isLoading()) {
+    <p>Cargando posts...</p>
+  } @else if (errorMessage()) {
+    <p role="alert">{{ errorMessage() }}</p>
+  } @else if (posts().length === 0) {
+    <p>No hay posts disponibles.</p>
+  } @else {
+    <ul>
+      @for (post of posts(); track post._id) {
+        <li>
+          <article>
+            @if (post.coverImage) {
+              <img [src]="post.coverImage" [alt]="post.title" />
+            }
+
+            <h2>
+              <a [routerLink]="['/posts', post.slug]">{{ post.title }}</a>
+            </h2>
+
+            @if (post.excerpt) {
+              <p>{{ post.excerpt }}</p>
+            }
+
+            <div>
+              <span>{{ post.author.name }}</span>
+              <span>·</span>
+              <span>{{ post.status }}</span>
+
+              @if (post.publishedAt) {
+                <span>· {{ post.publishedAt | date: 'mediumDate' }}</span>
+              }
+            </div>
+
+            @if (post.tags.length > 0) {
+              <div>
+                @for (tag of post.tags; track tag) {
+                  <span>{{ tag }}</span>
+                }
+              </div>
+            }
+
+            <!-- Acciones rápidas (solo visible para el autor o admin) -->
+            @if (authService.isLoggedIn()) {
+              <div>
+                <a [routerLink]="['/posts', post._id, 'edit']">Editar</a>
+              </div>
+            }
+          </article>
+        </li>
+      }
+    </ul>
+  }
+</section>

@@ -1,0 +1,62 @@
+<section>
+  <h1>Suscriptores</h1>
+
+  @if (isLoading()) {
+    <p>Cargando suscriptores...</p>
+  } @else if (errorMessage()) {
+    <p role="alert">{{ errorMessage() }}</p>
+  } @else if (subscribers().length === 0) {
+    <p>No hay suscriptores registrados.</p>
+  } @else {
+    <p>Total: {{ subscribers().length }}</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (subscriber of subscribers(); track subscriber._id) {
+          <tr>
+            <td>{{ subscriber.name }}</td>
+            <td>{{ subscriber.email }}</td>
+            <td>{{ subscriber.status === 'active' ? 'Activo' : 'Pausado' }}</td>
+            <td>{{ subscriber.createdAt | date: 'shortDate' }}</td>
+            <td>
+              @if (subscriber.status === 'active') {
+                <button
+                  type="button"
+                  (click)="pauseSubscriber(subscriber._id)"
+                  [disabled]="actionLoadingId() === subscriber._id"
+                >
+                  Pausar
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  (click)="activateSubscriber(subscriber._id)"
+                  [disabled]="actionLoadingId() === subscriber._id"
+                >
+                  Activar
+                </button>
+              }
+
+              <button
+                type="button"
+                (click)="deleteSubscriber(subscriber._id)"
+                [disabled]="actionLoadingId() === subscriber._id"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>
