@@ -93,12 +93,19 @@ export const routes: Routes = [
       ),
   },
 
-  // ─── Suscripción al newsletter (pública) ───────────────────────────────────
+  // ─── Páginas públicas ──────────────────────────────────────────────────────
   {
     path: 'subscribe',
     loadComponent: () =>
       import('./features/subscribers/subscribe/subscribe.component').then(
         (m) => m.SubscribeComponent
+      ),
+  },
+  {
+    path: 'about',
+    loadComponent: () =>
+      import('./features/about/about.component').then(
+        (m) => m.AboutComponent
       ),
   },
 

@@ -41,7 +41,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
         <div class="footer-column">
           <h4>Proyecto</h4>
           <ul class="footer-links">
-            <li><a href="#">Sobre Nosotros</a></li>
+            <li><a routerLink="/about">Sobre Nosotros</a></li>
             <li><a href="#">Contacto</a></li>
             <li><a href="#">Privacidad</a></li>
           </ul>

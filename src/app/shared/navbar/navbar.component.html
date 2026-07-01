@@ -3,9 +3,9 @@
     <div class="nav-left">
       <a routerLink="/" class="brand-logo" (click)="closeMobileMenu()">MindMirror</a>
       <div class="nav-links" [class.is-open]="mobileMenuOpen()">
-        <a routerLink="/" routerLinkActive="active" class="nav-link" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileMenu()">Inicio</a>
         <a routerLink="/posts/all" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Posts</a>
         <a routerLink="/subscribe" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Newsletter</a>
+        <a routerLink="/about" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Sobre Nosotros</a>
         @if (authService.isLoggedIn()) {
           <a routerLink="/drafts" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Borradores</a>
           <a routerLink="/profile" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Mi Perfil</a>
