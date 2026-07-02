@@ -8,6 +8,9 @@ export interface ApiResponse<T> {
 export interface ApiListResponse<T> {
   success: boolean;
   count: number;
+  page?: number;
+  totalPages?: number;
+  hasMore?: boolean;
   data: T[];
 }
 
