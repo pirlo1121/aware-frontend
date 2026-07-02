@@ -106,7 +106,7 @@ import { PostSummary } from '../../../core/interfaces';
                   </a>
                   @if (authService.isLoggedIn()) {
                     <div style="margin-top: 0.75rem; border-top: 1px solid rgba(197, 198, 206, 0.2); padding-top: 0.75rem; display: flex; justify-content: flex-end;">
-                      <a [routerLink]="['/posts', post._id, 'edit']" class="btn btn-secondary btn-sm">
+                      <a [routerLink]="['/posts', post.slug, 'edit']" class="btn btn-secondary btn-sm">
                         <span class="material-symbols-outlined" style="font-size: 16px;">edit</span> Editar
                       </a>
                     </div>

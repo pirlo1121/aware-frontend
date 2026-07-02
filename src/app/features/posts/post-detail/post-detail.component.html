@@ -116,7 +116,7 @@
               <span class="material-symbols-outlined">publish</span> Publicar ahora
             </button>
           }
-          <a [routerLink]="['/posts', currentPost._id, 'edit']" class="btn btn-secondary">
+          <a [routerLink]="['/posts', currentPost.slug, 'edit']" class="btn btn-secondary">
             <span class="material-symbols-outlined">edit</span> Editar contenido
           </a>
           <button

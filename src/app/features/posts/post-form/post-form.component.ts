@@ -36,7 +36,10 @@ export class PostFormComponent implements OnInit {
   readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly selectedCoverImage = signal<File | null>(null);
-  readonly editingPostId = signal<string | null>(null);
+  readonly editingSlug = signal<string | null>(null);
+  readonly currentCoverImageUrl = signal<string | null>(null);
+
+  private postId: string | null = null;
 
   readonly postForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.maxLength(200)]],
@@ -50,15 +53,41 @@ export class PostFormComponent implements OnInit {
   contentImageFiles: Record<number, File> = {};
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.editingPostId.set(id);
-      this.loadPostForEditing(id);
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if (slug) {
+      this.editingSlug.set(slug);
+      this.loadPostForEditing(slug);
     }
   }
 
-  private loadPostForEditing(id: string): void {
-    // TODO: implementar carga de post para edición
+  private loadPostForEditing(slug: string): void {
+    this.isLoading.set(true);
+    this.postService.getPostBySlug(slug).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (response) => {
+        const post = response.data;
+        this.postId = post._id;
+        this.postForm.patchValue({
+          title: post.title,
+          excerpt: post.excerpt || '',
+          status: post.status,
+          tags: post.tags.join(', '),
+        });
+        this.contentBlocks = post.content || [];
+        if (post.coverImage) {
+          this.currentCoverImageUrl.set(post.coverImage);
+        }
+        this.isLoading.set(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.isLoading.set(false);
+        const apiError = error.error;
+        if (Array.isArray(apiError?.error)) {
+          this.errorMessage.set(apiError.error.join(', '));
+        } else {
+          this.errorMessage.set(apiError?.error ?? 'Error al cargar el post.');
+        }
+      },
+    });
   }
 
   onCoverImageSelected(event: Event): void {
@@ -95,8 +124,8 @@ export class PostFormComponent implements OnInit {
       contentImages: contentImages.length > 0 ? contentImages : undefined,
     };
 
-    const request$ = this.editingPostId()
-      ? this.postService.updatePost(this.editingPostId()!, this.postService.buildPostFormData(payload))
+    const request$ = this.postId
+      ? this.postService.updatePost(this.postId, this.postService.buildPostFormData(payload))
       : this.postService.createPost(payload);
 
     request$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({

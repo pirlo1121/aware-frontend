@@ -2,10 +2,10 @@
   <div class="page-header">
     <div>
       <h1 class="page-title" style="font-family: var(--font-display); font-weight: 700; color: var(--primary);">
-        {{ editingPostId() ? 'Editar Artículo' : 'Nuevo Artículo' }}
+        {{ editingSlug() ? 'Editar Artículo' : 'Nuevo Artículo' }}
       </h1>
       <p style="font-size: 1rem; color: var(--on-surface-variant); margin-top: 0.25rem;">
-        {{ editingPostId() ? 'Modifica el contenido o los detalles de tu publicación.' : 'Redacta una nueva reflexión para tus lectores.' }}
+        {{ editingSlug() ? 'Modifica el contenido o los detalles de tu publicación.' : 'Redacta una nueva reflexión para tus lectores.' }}
       </p>
     </div>
   </div>
@@ -112,6 +112,10 @@
               <span style="font-size: 0.9rem; color: var(--on-surface-variant); font-weight: 500;">
                 {{ selectedCoverImage()!.name }}
               </span>
+            } @else if (currentCoverImageUrl()) {
+              <span style="font-size: 0.9rem; color: var(--on-surface-variant); font-weight: 500;">
+                Portada actual — <a [href]="currentCoverImageUrl()" target="_blank" style="color: var(--primary);">ver imagen</a>
+              </span>
             } @else {
               <span style="font-size: 0.9rem; color: var(--outline); font-style: italic;">
                 Ninguna imagen seleccionada
@@ -147,7 +151,7 @@
           </a>
           <button type="submit" class="btn btn-primary" [disabled]="isLoading()" style="padding: 0.75rem 2rem;">
             <span class="material-symbols-outlined">save</span>
-            {{ isLoading() ? 'Guardando...' : (editingPostId() ? 'Actualizar Artículo' : 'Publicar Artículo') }}
+            {{ isLoading() ? 'Guardando...' : (editingSlug() ? 'Actualizar Artículo' : 'Publicar Artículo') }}
           </button>
         </div>
       </div>

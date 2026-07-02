@@ -49,7 +49,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: ':id/edit',
+        path: ':slug/edit',
         canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/posts/post-form/post-form.component').then(
