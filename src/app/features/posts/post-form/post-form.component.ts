@@ -129,9 +129,9 @@ export class PostFormComponent implements OnInit {
       : this.postService.createPost(payload);
 
     request$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (response) => {
+      next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/posts', response.data.slug]);
+        this.router.navigate(['/drafts']);
       },
       error: (error: HttpErrorResponse) => {
         this.isLoading.set(false);

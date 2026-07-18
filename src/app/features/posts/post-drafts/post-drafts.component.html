@@ -43,7 +43,7 @@
           </div>
           <div class="card-body">
             <h3 class="card-title" style="font-size: 1.25rem;">
-              <a [routerLink]="['/posts', draft.slug]">{{ draft.title }}</a>
+              <a [routerLink]="['/posts', draft.slug, 'edit']">{{ draft.title }}</a>
             </h3>
             @if (draft.excerpt) {
               <p class="card-excerpt" style="font-size: 0.875rem; -webkit-line-clamp: 2;">

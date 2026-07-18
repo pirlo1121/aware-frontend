@@ -4,25 +4,11 @@ import { Observable } from 'rxjs';
 
 import { API_ENDPOINTS } from '../constants/api.constants';
 import { ApiResponse, ApiListResponse } from '../interfaces';
-import {
-  Subscriber,
-  SubscriberCreated,
-  CreateSubscriberPayload,
-} from '../interfaces';
+import { Subscriber } from '../interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriberService {
   private readonly http = inject(HttpClient);
-
-  /**
-   * Registra un nuevo suscriptor. Endpoint público.
-   */
-  subscribe(payload: CreateSubscriberPayload): Observable<ApiResponse<SubscriberCreated>> {
-    return this.http.post<ApiResponse<SubscriberCreated>>(
-      API_ENDPOINTS.subscribers.create,
-      payload
-    );
-  }
 
   /**
    * Lista todos los suscriptores. Solo admin.

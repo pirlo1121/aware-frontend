@@ -1,4 +1,7 @@
-# Estructura del proyecto — Aware Front
+# Estructura del proyecto — DashboardMirror
+
+Panel de administración (admin, login, crear/editar posts, borradores, suscriptores).
+Las páginas públicas (posts publicados, about, suscripción) viven en el proyecto `landing`.
 
 ```
 src/app/
@@ -15,13 +18,13 @@ src/app/
 │   │   ├── api.interface.ts          # ApiResponse, ApiListResponse, ApiError
 │   │   ├── user.interface.ts         # AuthUser, UserProfile, LoginPayload, RegisterPayload
 │   │   ├── post.interface.ts         # Post, PostSummary, ContentBlock, CreatePostPayload, UpdatePostPayload
-│   │   ├── subscriber.interface.ts   # Subscriber, CreateSubscriberPayload
+│   │   ├── subscriber.interface.ts   # Subscriber
 │   │   ├── upload.interface.ts       # UploadResponse
 │   │   └── index.ts                  # Barrel export
 │   └── services/
 │       ├── auth.service.ts           # Login, register, logout, profile, session restore
 │       ├── post.service.ts           # CRUD de posts + multipart/form-data
-│       ├── subscriber.service.ts     # Suscripción y administración
+│       ├── subscriber.service.ts     # Administración de suscriptores (listar, pausar, activar, borrar)
 │       └── upload.service.ts         # Subida de imágenes a S3
 │
 ├── features/
@@ -29,16 +32,12 @@ src/app/
 │   │   ├── login/                    # Ruta: /login (guestGuard)
 │   │   └── register/                 # Ruta: /register (guestGuard)
 │   ├── posts/
-│   │   ├── post-list/               # Ruta: /posts (pública)
-│   │   ├── post-detail/             # Ruta: /posts/:slug (pública)
-│   │   ├── post-form/               # Ruta: /posts/new y /posts/:id/edit (authGuard)
-│   │   └── post-drafts/             # Ruta: /drafts (authGuard)
+│   │   ├── post-form/                # Ruta: /posts/new y /posts/:slug/edit (adminGuard)
+│   │   └── post-drafts/              # Ruta: /drafts (adminGuard)
 │   ├── admin/
-│   │   └── subscriber-list/         # Ruta: /admin/subscribers (adminGuard)
-│   ├── subscribers/
-│   │   └── subscribe/               # Ruta: /subscribe (pública)
+│   │   └── subscriber-list/          # Ruta: /admin/subscribers (adminGuard)
 │   └── profile/
-│       └── profile.component.ts     # Ruta: /profile (authGuard)
+│       └── profile.component.ts      # Ruta: /profile (adminGuard)
 │
 └── shared/
     ├── navbar/                       # Componente de navegación reactivo
@@ -49,16 +48,13 @@ src/app/
 
 | Ruta | Componente | Guard |
 |------|-----------|-------|
-| `/` | Redirige a `/posts` | — |
+| `/` | Redirige a `/login` | — |
 | `/login` | LoginComponent | guestGuard |
 | `/register` | RegisterComponent | guestGuard |
-| `/posts` | PostListComponent | — |
-| `/posts/new` | PostFormComponent | authGuard |
-| `/posts/:id/edit` | PostFormComponent | authGuard |
-| `/posts/:slug` | PostDetailComponent | — |
-| `/drafts` | PostDraftsComponent | authGuard |
-| `/profile` | ProfileComponent | authGuard |
-| `/subscribe` | SubscribeComponent | — |
+| `/posts/new` | PostFormComponent | adminGuard |
+| `/posts/:slug/edit` | PostFormComponent | adminGuard |
+| `/drafts` | PostDraftsComponent | adminGuard |
+| `/profile` | ProfileComponent | adminGuard |
 | `/admin/subscribers` | SubscriberListComponent | adminGuard |
 | `/**` | NotFoundComponent | — |
 

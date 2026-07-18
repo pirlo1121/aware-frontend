@@ -1,20 +1,15 @@
 <header>
   <nav class="nav-container">
     <div class="nav-left">
-      <a routerLink="/" class="brand-logo" (click)="closeMobileMenu()">MindMirror</a>
+      <a routerLink="/drafts" class="brand-logo" (click)="closeMobileMenu()">MindMirror</a>
 
       <div class="nav-links" [class.is-open]="mobileMenuOpen()">
-        <a routerLink="/posts/all" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Posts</a>
-        <a routerLink="/subscribe" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Newsletter</a>
-        <a routerLink="/about" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Sobre Nosotros</a>
         @if (authService.isLoggedIn()) {
           <a routerLink="/drafts" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Borradores</a>
           <a routerLink="/profile" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Mi Perfil</a>
           @if (authService.isAdmin()) {
             <a routerLink="/admin/subscribers" routerLinkActive="active" class="nav-link" (click)="closeMobileMenu()">Suscriptores</a>
           }
-        }
-        @if (authService.isLoggedIn()) {
           <div class="nav-links-mobile-actions">
             <button type="button" class="btn btn-secondary btn-sm" style="width: 100%;" (click)="logout(); closeMobileMenu()">
               <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
@@ -45,8 +40,6 @@
           <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
           Cerrar sesión
         </button>
-      } @else {
-        <a routerLink="/subscribe" class="btn btn-primary nav-desktop-only">Suscribirse</a>
       }
     </div>
   </nav>

@@ -4,10 +4,10 @@ import { adminGuard } from './core/guards/admin.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
-  // ─── Raíz: redirige al listado de posts ────────────────────────────────────
+  // ─── Raíz: redirige al login ────────────────────────────────────────────────
   {
     path: '',
-    redirectTo: 'posts',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
 
@@ -29,20 +29,13 @@ export const routes: Routes = [
       ),
   },
 
-  // ─── Posts ─────────────────────────────────────────────────────────────────
+  // ─── Posts (gestión, solo admin) ────────────────────────────────────────────
   {
     path: 'posts',
+    canActivate: [adminGuard],
     children: [
       {
-        path: '',
-        loadComponent: () =>
-          import('./features/posts/post-list/post-list.component').then(
-            (m) => m.PostListComponent
-          ),
-      },
-      {
         path: 'new',
-        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/posts/post-form/post-form.component').then(
             (m) => m.PostFormComponent
@@ -50,24 +43,9 @@ export const routes: Routes = [
       },
       {
         path: ':slug/edit',
-        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/posts/post-form/post-form.component').then(
             (m) => m.PostFormComponent
-          ),
-      },
-      {
-        path: 'all',
-        loadComponent: () =>
-          import('./features/posts/post-all/post-all.component').then(
-            (m) => m.PostAllComponent
-          ),
-      },
-      {
-        path: ':slug',
-        loadComponent: () =>
-          import('./features/posts/post-detail/post-detail.component').then(
-            (m) => m.PostDetailComponent
           ),
       },
     ],
@@ -90,22 +68,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/profile/profile.component').then(
         (m) => m.ProfileComponent
-      ),
-  },
-
-  // ─── Páginas públicas ──────────────────────────────────────────────────────
-  {
-    path: 'subscribe',
-    loadComponent: () =>
-      import('./features/subscribers/subscribe/subscribe.component').then(
-        (m) => m.SubscribeComponent
-      ),
-  },
-  {
-    path: 'about',
-    loadComponent: () =>
-      import('./features/about/about.component').then(
-        (m) => m.AboutComponent
       ),
   },
 

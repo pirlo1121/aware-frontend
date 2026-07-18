@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, shareReplay, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { API_ENDPOINTS } from '../constants/api.constants';
 import { ApiResponse, ApiListResponse } from '../interfaces';
@@ -11,45 +11,9 @@ import {
   UpdatePostPayload,
 } from '../interfaces';
 
-const CACHE_TTL = 30_000; // 30 segundos
-
-interface CacheEntry<T> {
-  data: T;
-  timestamp: number;
-}
-
 @Injectable({ providedIn: 'root' })
 export class PostService {
   private readonly http = inject(HttpClient);
-
-  /** Caché simple en memoria para posts publicados */
-  private postsCache$: Observable<ApiListResponse<PostSummary>> | null = null;
-  private postsCacheTimestamp = 0;
-
-  /**
-   * Obtiene los posts publicados con caché en memoria (30s).
-   * Si el usuario autenticado es admin, el servidor devuelve todos (incluyendo borradores).
-   * Las cookies se envían automáticamente para permitir esa detección.
-   */
-  getPosts(): Observable<ApiListResponse<PostSummary>> {
-    const now = Date.now();
-    if (this.postsCache$ && (now - this.postsCacheTimestamp) < CACHE_TTL) {
-      return this.postsCache$;
-    }
-    this.postsCache$ = this.http.get<ApiListResponse<PostSummary>>(API_ENDPOINTS.posts.list, {
-      withCredentials: true,
-    }).pipe(
-      tap(() => this.postsCacheTimestamp = Date.now()),
-      shareReplay({ bufferSize: 1, refCount: true }),
-    );
-    return this.postsCache$;
-  }
-
-  /** Invalida la caché de posts (útil después de crear/editar/eliminar) */
-  invalidatePostsCache(): void {
-    this.postsCache$ = null;
-    this.postsCacheTimestamp = 0;
-  }
 
   /**
    * Obtiene los borradores del usuario autenticado (o todos si es admin).
@@ -81,7 +45,7 @@ export class PostService {
 
     return this.http.post<ApiResponse<Post>>(API_ENDPOINTS.posts.list, formData, {
       withCredentials: true,
-    }).pipe(tap(() => this.invalidatePostsCache()));
+    });
   }
 
   /**
@@ -96,7 +60,7 @@ export class PostService {
       API_ENDPOINTS.posts.byId(id),
       payload,
       { withCredentials: true }
-    ).pipe(tap(() => this.invalidatePostsCache()));
+    );
   }
 
   /**
@@ -108,7 +72,7 @@ export class PostService {
       API_ENDPOINTS.posts.publish(id),
       {},
       { withCredentials: true }
-    ).pipe(tap(() => this.invalidatePostsCache()));
+    );
   }
 
   /**
@@ -119,7 +83,7 @@ export class PostService {
     return this.http.delete<ApiResponse<Record<string, never>>>(
       API_ENDPOINTS.posts.byId(id),
       { withCredentials: true }
-    ).pipe(tap(() => this.invalidatePostsCache()));
+    );
   }
 
   // ─── Helpers ────────────────────────────────────────────────────────────────

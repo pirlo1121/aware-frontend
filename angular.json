@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "aware-front": {
+    "dashboard-mirror": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -79,10 +79,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "aware-front:build:production"
+              "buildTarget": "dashboard-mirror:build:production"
             },
             "development": {
-              "buildTarget": "aware-front:build:development"
+              "buildTarget": "dashboard-mirror:build:development"
             }
           },
           "defaultConfiguration": "development"
