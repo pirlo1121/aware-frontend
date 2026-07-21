@@ -410,6 +410,7 @@ nav.nav-container {
 
 .btn-danger:hover {
   background-color: #93000a;
+  color: #ffffff;
 }
 
 .btn-sm {
@@ -779,7 +780,7 @@ textarea.form-control {
 
 /* Newsletter section */
 .newsletter-card {
-  background-color: var(--secondary-fixed);
+  background-color: #e89c3f;
   color: var(--on-secondary-fixed);
   border-radius: var(--radius-lg);
   padding: 3rem 2rem;
@@ -1287,7 +1288,7 @@ footer {
 /* ===== DARK MODE ===== */
 .dark-mode {
   --primary: #b6c7eb;
-  --primary-container: #1e2745;
+  --primary-container: #374676;
   --surface-tint: #b6c7eb;
   --inverse-surface: #e4e2e5;
   --background: #0c0e17;
@@ -1320,11 +1321,9 @@ footer {
   --error-container: #93000a;
   --on-error-container: #ffdad6;
   --on-background: #e4e2e5;
-  /* --on-primary-container: #b6c7eb; */
   --on-primary-container: rgb(255, 232, 190);
 
-  /* --secondary-fixed: #502900; */
-  --secondary-fixed: #1e2745;
+  --secondary-fixed: #603d1a;
 
   --on-secondary-fixed: #ffb67a;
   --on-error: #1b1b1e;
@@ -1353,6 +1352,10 @@ footer {
 .dark-mode .newsletter-input {
   background-color: var(--surface-container-high);
   color: var(--on-surface);
+}
+
+.dark-mode .newsletter-card {
+  background-color: #603d1a;
 }
 
 .dark-mode footer {
