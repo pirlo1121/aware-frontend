@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/:path*", "destination": "https://api.consciousnessmirror.com/api/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

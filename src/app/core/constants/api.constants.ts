@@ -1,5 +1,9 @@
 // export const API_BASE_URL = 'http://localhost:5000/api';
-export const API_BASE_URL = 'https://api.consciousnessmirror.com/api';
+// export const API_BASE_URL = 'https://api.consciousnessmirror.com/api';
+// Ruta relativa: Vercel la reenvía al backend real (ver vercel.json).
+// Esto hace que la cookie de sesión sea de primera parte para el navegador
+// en vez de cross-site, evitando que se bloquee por privacidad (ITP, etc.).
+export const API_BASE_URL = '/api';
 
 
 export const API_ENDPOINTS = {
