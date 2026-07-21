@@ -23,6 +23,7 @@ export class PostDraftsComponent implements OnInit {
   readonly isLoading = signal(true);
   readonly errorMessage = signal<string | null>(null);
   readonly publishingId = signal<string | null>(null);
+  readonly deletingId = signal<string | null>(null);
 
   ngOnInit(): void {
     this.loadDrafts();
@@ -60,6 +61,23 @@ export class PostDraftsComponent implements OnInit {
           error.error?.error ?? 'Error al publicar el borrador.'
         );
         this.publishingId.set(null);
+      },
+    });
+  }
+
+  deleteDraft(id: string): void {
+    if (!confirm('¿Estás seguro de eliminar este borrador? Esta acción no se puede deshacer.')) return;
+
+    this.deletingId.set(id);
+
+    this.postService.deletePost(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.drafts.update((drafts) => drafts.filter((draft) => draft._id !== id));
+        this.deletingId.set(null);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.errorMessage.set(error.error?.error ?? 'Error al eliminar el borrador.');
+        this.deletingId.set(null);
       },
     });
   }

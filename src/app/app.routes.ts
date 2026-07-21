@@ -1,14 +1,25 @@
 import { Routes } from '@angular/router';
 
 import { adminGuard } from './core/guards/admin.guard';
+import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 
 export const routes: Routes = [
-  // ─── Raíz: redirige al login ────────────────────────────────────────────────
+  // ─── Raíz: redirige al dashboard ────────────────────────────────────────────
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'dashboard',
     pathMatch: 'full',
+  },
+
+  // ─── Dashboard (panel principal, solo admin) ───────────────────────────────
+  {
+    path: 'dashboard',
+    canActivate: [adminGuard],
+    loadComponent: () =>
+      import('./features/dashboard/dashboard.component').then(
+        (m) => m.DashboardComponent
+      ),
   },
 
   // ─── Autenticación (solo para usuarios no autenticados) ────────────────────
@@ -34,6 +45,13 @@ export const routes: Routes = [
     path: 'posts',
     canActivate: [adminGuard],
     children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/posts/post-list/post-list.component').then(
+            (m) => m.PostListComponent
+          ),
+      },
       {
         path: 'new',
         loadComponent: () =>
@@ -61,10 +79,10 @@ export const routes: Routes = [
       ),
   },
 
-  // ─── Perfil (usuario autenticado) ──────────────────────────────────────────
+  // ─── Perfil (cualquier usuario autenticado) ────────────────────────────────
   {
     path: 'profile',
-    canActivate: [adminGuard],
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./features/profile/profile.component').then(
         (m) => m.ProfileComponent

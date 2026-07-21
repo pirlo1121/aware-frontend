@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, DestroyRef, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, DestroyRef, HostListener } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -18,6 +18,16 @@ export class NavbarComponent {
   readonly themeService = inject(ThemeService);
 
   readonly mobileMenuOpen = signal(false);
+
+  readonly userInitials = computed(() => {
+    const name = this.authService.currentUser()?.name ?? '';
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]!.toUpperCase())
+      .join('');
+  });
 
   @HostListener('document:keydown.escape')
   onEscape(): void {

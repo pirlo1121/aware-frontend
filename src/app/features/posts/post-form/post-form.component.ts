@@ -131,7 +131,7 @@ export class PostFormComponent implements OnInit {
     request$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/drafts']);
+        this.router.navigate([formValue.status === 'published' ? '/posts' : '/drafts']);
       },
       error: (error: HttpErrorResponse) => {
         this.isLoading.set(false);

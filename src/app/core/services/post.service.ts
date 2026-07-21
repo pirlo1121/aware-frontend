@@ -16,6 +16,16 @@ export class PostService {
   private readonly http = inject(HttpClient);
 
   /**
+   * Obtiene los posts publicados (paginados).
+   */
+  getPosts(): Observable<ApiListResponse<PostSummary>> {
+    return this.http.get<ApiListResponse<PostSummary>>(
+      API_ENDPOINTS.posts.list,
+      { withCredentials: true }
+    );
+  }
+
+  /**
    * Obtiene los borradores del usuario autenticado (o todos si es admin).
    * Requiere cookie JWT.
    */

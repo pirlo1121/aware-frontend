@@ -12,7 +12,7 @@ export const adminGuard: CanActivateFn = () => {
     return authService.restoreSession().pipe(
       map(() => {
         if (authService.isAdmin()) return true;
-        if (authService.isLoggedIn()) return router.createUrlTree(['/']);
+        if (authService.isLoggedIn()) return router.createUrlTree(['/profile']);
         return router.createUrlTree(['/login']);
       }),
       catchError(() => of(router.createUrlTree(['/login']))),
@@ -24,7 +24,7 @@ export const adminGuard: CanActivateFn = () => {
   }
 
   if (authService.isLoggedIn()) {
-    return router.createUrlTree(['/']);
+    return router.createUrlTree(['/profile']);
   }
 
   return router.createUrlTree(['/login']);

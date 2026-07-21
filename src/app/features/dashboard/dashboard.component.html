@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="dashboard-welcome animate-in">
+    <div class="dashboard-welcome-avatar">{{ initials || 'A' }}</div>
+    <div>
+      <h1 class="page-title" style="margin-bottom: 0.25rem;">
+        Hola, {{ currentUser()?.name || 'Administrador' }}
+      </h1>
+      <p style="font-size: 1rem; color: var(--on-surface-variant);">
+        Bienvenido de nuevo a tu panel de administración de MindMirror.
+      </p>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-primary">
+        <span class="material-symbols-outlined">article</span>
+      </div>
+      <div class="stat-body">
+        <span class="stat-number">{{ isLoadingStats() ? '—' : stats().publishedCount }}</span>
+        <span class="stat-label">Posts publicados</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-secondary">
+        <span class="material-symbols-outlined">drafts</span>
+      </div>
+      <div class="stat-body">
+        <span class="stat-number">{{ isLoadingStats() ? '—' : stats().draftCount }}</span>
+        <span class="stat-label">Borradores</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-success">
+        <span class="material-symbols-outlined">group</span>
+      </div>
+      <div class="stat-body">
+        <span class="stat-number">{{ isLoadingStats() ? '—' : stats().activeSubscribers }}</span>
+        <span class="stat-label">Suscriptores activos</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon stat-icon-neutral">
+        <span class="material-symbols-outlined">contacts</span>
+      </div>
+      <div class="stat-body">
+        <span class="stat-number">{{ isLoadingStats() ? '—' : stats().totalSubscribers }}</span>
+        <span class="stat-label">Suscriptores totales</span>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="font-size: 1.4rem; margin-bottom: 1.25rem;">Acciones rápidas</h2>
+
+  <div class="quick-actions-grid section-gap">
+    <a routerLink="/posts/new" class="quick-action-card">
+      <div class="quick-action-icon">
+        <span class="material-symbols-outlined">add_circle</span>
+      </div>
+      <div>
+        <h3 class="quick-action-title">Crear post</h3>
+        <p class="quick-action-desc">Redacta un nuevo artículo para tus lectores.</p>
+      </div>
+      <span class="material-symbols-outlined quick-action-arrow">arrow_forward</span>
+    </a>
+
+    <a routerLink="/posts" class="quick-action-card">
+      <div class="quick-action-icon">
+        <span class="material-symbols-outlined">article</span>
+      </div>
+      <div>
+        <h3 class="quick-action-title">Ver posts</h3>
+        <p class="quick-action-desc">Edita o elimina los artículos publicados.</p>
+      </div>
+      <span class="material-symbols-outlined quick-action-arrow">arrow_forward</span>
+    </a>
+
+    <a routerLink="/drafts" class="quick-action-card">
+      <div class="quick-action-icon">
+        <span class="material-symbols-outlined">drafts</span>
+      </div>
+      <div>
+        <h3 class="quick-action-title">Ver borradores</h3>
+        <p class="quick-action-desc">Continúa, publica o elimina tus borradores.</p>
+      </div>
+      <span class="material-symbols-outlined quick-action-arrow">arrow_forward</span>
+    </a>
+
+    <a routerLink="/admin/subscribers" class="quick-action-card">
+      <div class="quick-action-icon">
+        <span class="material-symbols-outlined">group</span>
+      </div>
+      <div>
+        <h3 class="quick-action-title">Ver suscriptores</h3>
+        <p class="quick-action-desc">Administra la lista de lectores del boletín.</p>
+      </div>
+      <span class="material-symbols-outlined quick-action-arrow">arrow_forward</span>
+    </a>
+
+    <a routerLink="/profile" class="quick-action-card">
+      <div class="quick-action-icon">
+        <span class="material-symbols-outlined">account_circle</span>
+      </div>
+      <div>
+        <h3 class="quick-action-title">Mi perfil</h3>
+        <p class="quick-action-desc">Consulta los detalles de tu cuenta.</p>
+      </div>
+      <span class="material-symbols-outlined quick-action-arrow">arrow_forward</span>
+    </a>
+  </div>
+</div>
